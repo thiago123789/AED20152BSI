@@ -29,9 +29,11 @@ public class ArvoreB {
 
 		arvore.teste(arvore.raiz);
 	}
-
+	
+	//CONSTRUTOR DEFAULT PARA ARVORE BINÁRIA
 	public ArvoreB(){}
 
+	//METODO INSERIR PARA INSERIR UM INTEIRO (TAMBÉM SALVA O PAI DO NÓ)
 	public void inserir(Node<Integer> T, Integer valor) {
 		if(this.raiz == null){
 			Node<Integer> aux = new Node<Integer>(valor);
@@ -57,7 +59,8 @@ public class ArvoreB {
 			}  
 		}  
 	} 
-
+	
+	//METODO QUE IMPRIMI OS NÓS EM ESTRUTURAS DE STRING, UTILIZA METODO toString DA CLASSE NODE
 	public void teste(Node<Integer> no){
 		if(no != null){ 
 			System.out.println(no.toString()); 
