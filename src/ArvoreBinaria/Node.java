@@ -116,5 +116,10 @@ public class Node<T> {
 		
 		return resultado;
 	}
+
+	public void setPai(Node<Integer> y) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

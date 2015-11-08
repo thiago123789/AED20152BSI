@@ -52,13 +52,17 @@ public class ArvoreB {
 			if (T.direita != null) {  
 				inserir(T.direita, valor);  
 			} else {  
-				//                System.out.println("  Inserindo " + valor + " a direita de " + T.dados);
+//                System.out.println("  Inserindo " + valor + " a direita de " + T.dados);
 				T.direita = new Node<Integer>(valor);  
 				T.direita.pai = T;
-
-			}  
+			}
 		}  
 	} 
+	
+	
+	
+	
+	
 	
 	//METODO QUE IMPRIMI OS NÓS EM ESTRUTURAS DE STRING, UTILIZA METODO toString DA CLASSE NODE
 	public void teste(Node<Integer> no){
