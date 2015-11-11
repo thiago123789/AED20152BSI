@@ -4,12 +4,13 @@ import java.util.Scanner;
 ///++++ DUVIDAS +++++///
 /*
  * PERGUNTAR AO PROFESSOR SE DEVE SER CRIADO UM NOVO ATRIBUTO PARA ARVORE CHAMADO NIL E TODAS AS FOLHAS 
- * E O PAI DA RAIZ DEVE DEVEM APONTAR PARA ELE
+ * E O PAI DA RAIZ DEVE DEVEM APONTAR PARA ELE (RESPONDIDA)
  * 
  * 
  * */
 public class ArvoreRN {
 	Node<Integer> raiz;
+	Node<Integer> nil;
 
 	static String vermelho = "vermelho".toUpperCase(); 
 	static String preto = "preto".toUpperCase();
@@ -47,21 +48,25 @@ public class ArvoreRN {
 			arvore.inserir(arvore, aux);
 
 		}
-
+		
 		//		System.out.println(TreePrint.PrintableNode(arvore.raiz));
 
-		//		arvore.teste(arvore.raiz);
+				arvore.teste(arvore.raiz);
 	}
 
 	//CONSTRUTOR DEFAULT PARA INSTANCIAR A ARVORE;
-	public ArvoreRN(){}
+	public ArvoreRN(){
+		this.nil = new Node(preto, "nil");
+		this.raiz = new Node();
+		this.raiz = this.nil;
+	}
 
 	//METODO PARA INSERIR NÓS EM UMA ARVORE RUBRO-NEGRA	
 	public void inserir(ArvoreRN T, Node<Integer> z){
 		Node<Integer> y = new Node<Integer>();
 		Node<Integer> x = T.raiz;
 
-		while(x != null){
+		while(x != T.nil){
 			y = x;
 			if(z.getDados() < x.getDados()){
 				x = x.getEsquerda();
@@ -72,13 +77,17 @@ public class ArvoreRN {
 		z.setPai(y);
 		if(y.getDados() == null){
 			T.raiz = z;
+			//Editado 10/11
+			T.raiz.setPai(T.nil);
+			T.raiz.setDireita(T.nil);
+			T.raiz.setEsquerda(T.nil);
 		}else if(z.getDados() < y.getDados()){
 			y.setEsquerda(z);			 
 		}else{
 			y.setDireita(z);
 		}
-		z.setEsquerda(null);
-		z.setDireita(null);
+		z.setEsquerda(T.nil);
+		z.setDireita(T.nil);
 		z.setCor(vermelho);
 		this.insertFixup(T, z);
 	}
@@ -154,5 +163,15 @@ public class ArvoreRN {
 		no.setPai(aux);
 	}
 
-
+	
+	public void teste(Node<Integer> no){
+		if(no != null){ 
+			System.out.println(no.toString()); 
+			teste(no.getEsquerda());
+			teste(no.getDireita()); 
+		}
+	}
+	
+	
+	
 }

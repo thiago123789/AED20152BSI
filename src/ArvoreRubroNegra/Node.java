@@ -9,6 +9,15 @@ public class Node<T> implements PrintableNode{
 	Node<T> direita;
 	T dados;
 	
+	static String vermelho = "vermelho".toUpperCase(); 
+	static String preto = "preto".toUpperCase();
+
+	
+	public Node(String cor, T dados){
+		this.setCor(cor);
+		this.setDados(dados);
+	}
+	
 	public Node(){
 	}
 	
@@ -65,9 +74,9 @@ public class Node<T> implements PrintableNode{
 		}else{
 			resultado += "\nD: "+this.direita.getDados();
 		}
-		if(this.cor == "Preto".toUpperCase()){
+		if(this.cor.equals(preto)){
 			resultado += "\nCor: Preto";
-		}else{
+		}else if(this.cor.equals(vermelho)){
 			resultado += "\nCor: Vermelho";
 		}
 		return resultado;
