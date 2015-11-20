@@ -6,6 +6,7 @@ import java.util.Scanner;
  * PERGUNTAR AO PROFESSOR SE DEVE SER CRIADO UM NOVO ATRIBUTO PARA ARVORE CHAMADO NIL E TODAS AS FOLHAS 
  * E O PAI DA RAIZ DEVE DEVEM APONTAR PARA ELE (RESPONDIDA)
  * 
+ *
  * 
  * */
 public class ArvoreRN {
@@ -19,7 +20,7 @@ public class ArvoreRN {
 	public static void main(String[] args) {
 		ArvoreRN arvore = new ArvoreRN();//INSTACIANDO A ARVORE RUBRO-NEGRA
 
-		int elementos, cor;/*INICIALIZANDO VARIAVEL "ELEMENTOS" PARA CONTAGEM DOS ELEMENTOS A SEREM INSERIDOS PELO USUÁRIO
+		int elementos, cor, delete;/*INICIALIZANDO VARIAVEL "ELEMENTOS" PARA CONTAGEM DOS ELEMENTOS A SEREM INSERIDOS PELO USUÁRIO
 							E COR COMO VARIAVEL AUXILIAR PARA SER COLOCADA NO NÓ A SER INSERIDO
 		 */
 		Scanner entrada = new Scanner(System.in);
@@ -30,20 +31,21 @@ public class ArvoreRN {
 			Node<Integer> aux = new Node<Integer>();//INSTANCIANDO UM NÓ NULLO PARA RECEBER OS VALORES DIGITADOS PELO USUÁRIO
 			System.out.println("Digite o "+(i+1)+"º elemento: ");
 			valor = entrada.nextInt();//A VARIÁVEL "VALOR" VAI RECEBER O PROXIMO INTEIRO DIGITADO PELO USUÁRIO
-			System.out.println("Digite 1 para vermelho e 2 para preto");
-			cor = entrada.nextInt();//A VARIÁVEL "COR" VAI RECEBER UM INTEIRO DIGITAD0 PELO USUÁRIO;
-			if(cor == 1){//SE O INTEIRO FOR 1 O NÓ AUXILIAR CRIADO RECEBE COR VERMELHA
-				aux.setCor(vermelho);
-			}else if(cor == 2){//SE O INTEIRO FOR 2 O NÓ AUXILIAR CRIADO RECEBE COR PRETA
-				aux.setCor(preto);
-			}else{//SE FOR DIFERENTE DE 1 OU 2 RETORNA COR INVALIDA
-				System.out.println("cor invalida");
-			}
 			aux.setDados(valor);//SETA O VALOR DO NÓ AUXILIAR CRIADO; 
 			arvore.inserir(arvore, aux);//INSERE O NÓ AUXLIAR NA ARVORE RUBRO NEGRA
 
 		}
-		
+
+		System.out.println("Delete um nó");
+		delete = entrada.nextInt();
+		Node<Integer> aux1  = new Node<Integer>();
+		aux1.setDados(delete);
+		if(arvore.existeNode(arvore, aux1)){
+			System.out.println("existe");
+		}else{
+			System.out.println("nao existe");
+		}
+		//		arvore.buscaRemove(arvore, aux1);
 		arvore.teste(arvore, arvore.raiz);//IMPRIME A ARVORE
 	}
 	//----------------------------FIM DO MAIN ------------------------------------
@@ -61,7 +63,7 @@ public class ArvoreRN {
 
 	//METODO PARA INSERIR NÓS EM UMA ARVORE RUBRO-NEGRA	
 	public void inserir(ArvoreRN T, Node<Integer> z){
-		Node<Integer> y = new Node<Integer>();
+		Node<Integer> y = T.nil;		
 		Node<Integer> x = T.raiz;
 		while(x != T.nil){
 			y = x;
@@ -72,7 +74,7 @@ public class ArvoreRN {
 			}
 		}
 		z.setPai(y);
-		if(y.getDados() == null){
+		if(y.equals(T.nil)){
 			T.raiz = z;
 			//Editado 10/11
 			T.raiz.setPai(T.nil);
@@ -189,7 +191,7 @@ public class ArvoreRN {
 		return no;
 	}
 
-	//Completo - deleta no da arvore e conserta
+	//METODO PARA DELETAR NODE
 	public void delete(ArvoreRN T, Node<Integer> no){
 		Node<Integer> aux = new Node<Integer>();
 		Node<Integer> x = new Node<Integer>();
@@ -219,14 +221,135 @@ public class ArvoreRN {
 		}
 	}
 
-	//Falta terminar---\/
+	//COMPLETO FALTA TESTAR
 	public void deleteFixup(ArvoreRN T, Node<Integer> no){
-
 		while(!(no.equals(T.raiz)) && (no.getCor().equals(preto))){
 			if(no.equals(no.getPai().getEsquerda())){
+				Node<Integer> aux = no.getPai().getDireita();
+				if(aux.getCor().equals(vermelho)){
+					aux.setCor(preto);
+					no.getPai().setCor(vermelho);
+					this.leftRotate(T, no.getPai());
+					aux = no.getPai().getDireita();
+				}
+				if ((aux.getEsquerda().getCor().equals(preto))&&(aux.getDireita().getCor().equals(preto))){
+					aux.setCor(vermelho);
+					no = no.getPai();
+				}else if(aux.getDireita().getCor().equals(preto)){
+					aux.getEsquerda().setCor(preto);
+					aux.setCor(vermelho);
+					this.rightRotate(T, aux);
+					aux = no.getPai().getDireita();
+				}
+				aux.setCor(no.getPai().getCor());
+				no.getPai().setCor(preto);
+				aux.getDireita().setCor(preto);
+				this.leftRotate(T, no.getPai());
+				no = T.raiz;
+			}else{
+				Node<Integer> aux = no.getPai().getEsquerda();
+				if(aux.getCor().equals(vermelho)){
+					aux.setCor(preto);
+					no.getPai().setCor(vermelho);
+					this.leftRotate(T, no.getPai());
+					aux = no.getPai().getEsquerda();
+				}
+				if ((aux.getDireita().getCor().equals(preto))&&(aux.getEsquerda().getCor().equals(preto))){
+					aux.setCor(vermelho);
+					no = no.getPai();
+				}else if(aux.getEsquerda().getCor().equals(preto)){
+					aux.getDireita().setCor(preto);
+					aux.setCor(vermelho);
+					this.rightRotate(T, aux);
+					aux = no.getPai().getEsquerda();
+				}
+				aux.setCor(no.getPai().getCor());
+				no.getPai().setCor(preto);
+				aux.getEsquerda().setCor(preto);
+				this.leftRotate(T, no.getPai());
+				no = T.raiz;
+			}
+		}
+		no.setCor(preto);
+	}
 
+	//METODO PARA SABER SE UM NUMERO EXISTE NA ARVORE
+	public boolean existeNode(ArvoreRN T, Node<Integer> no){
+		boolean resultado = false;
+		Node<Integer> y = T.nil;		
+		Node<Integer> x = T.raiz;
+		while(x != T.nil){
+			y = x;
+			if(no.getDados() < x.getDados()){
+				x = x.getEsquerda();
+				if((x != T.nil)){
+					if(x.getDados().equals(no.getDados())){
+						resultado = true;
+						break;
+					}
+				}
+			}else{
+				x = x.getDireita();
+				if((x != T.nil)){
+					if(x.getDados().equals(no.getDados())){
+						resultado = true;
+						break;
+					}
+				}
+			}
+		}
+		return resultado;
+	}
+
+
+	public Node<Integer> buscarNode(ArvoreRN T, Node<Integer> no){
+		Node<Integer> retorno = new Node<Integer>();
+		if(this.existeNode(T, no)){
+			Node<Integer> y = T.nil;		
+			Node<Integer> x = T.raiz;
+			while(x != T.nil){
+				y = x;
+				if(no.getDados() < x.getDados()){
+					x = x.getEsquerda();
+					if(x.getDados().equals(no.getDados())){
+						retorno = x;
+						break;
+					}
+				}else{
+					x = x.getDireita();
+					if(x.getDados().equals(no.getDados())){
+						retorno = x;
+						break;
+					}
+				}
+			}
+		}
+
+		return retorno;
+	}
+
+	public void buscaRemove(ArvoreRN T, Node<Integer> no){
+		if(this.existeNode(T, no)){
+			Node<Integer> y = T.nil;		
+			Node<Integer> x = T.raiz;
+			while(x != T.nil){
+				y = x;
+				if(no.getDados() < x.getDados()){
+					x = x.getEsquerda();
+					if(x.getDados().equals(no.getDados())){
+						this.delete(T, x);
+						break;
+					}
+				}else{
+					x = x.getDireita();
+					if(x.getDados().equals(no.getDados())){
+						this.delete(T, x);
+						break;
+					}
+				}
 			}
 		}
 	}
+
 
 }
